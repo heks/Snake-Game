@@ -1,0 +1,9 @@
+For those running Mac OS X, you'll need to do a few things to get libSDL to work:
+
+1) Download the Mac OS X runtime library from http://www.libsdl.org/download-1.2.php
+2) Open the disk image and copy SDL.framework to /Library/Frameworks
+3) Copy devel-lite to some temporary location
+4) Compile the SDLMain module within with the following invocation:
+    gcc -c SDLMain.m -I /Library/Frameworks/SDL.framework/Headers -o SDLMain.o
+5) Make a new directory inside mp4 called "lib", and copy SDLMain.o into there
+6) The build should now work!

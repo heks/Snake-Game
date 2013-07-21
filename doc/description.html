@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>ECE 190 MP5: Snake Game</title>
+  <style type="text/css">
+      dt { font-weight: bold; }
+
+      img { display: block;
+            margin-left: auto;
+            margin-right: auto; }
+
+      figcaption { display: block;
+                   margin-top: 0.8ex;
+                   width: 40em;
+                   text-align: center;
+                   margin-left: auto;
+                   margin-right: auto; }
+
+      body { margin-left: auto;
+             margin-right: auto;
+             margin-bottom: 6ex;
+             width: 40em; }
+     
+      code { white-space: nowrap; }
+      
+      @media print
+      {
+          section { page-break-inside: avoid; }
+      }
+  </style>
+</head>
+
+<body>
+<section>
+  <h1>Machine Problem 5: Snake Game</h1>
+  
+  <p>"Snake" is a classic arcade game.  From <a href="http://en.wikipedia.org/wiki/Snake_(video_game)">Wikipedia</a>:</p>
+  <blockquote>The player controls a long, thin creature, resembling a snake, which roams around on a bordered plane, picking up food (or some other item), trying to avoid hitting its own tail or the "walls" that surround the playing area. Each time the snake eats a piece of food, its tail grows longer, making the game increasingly difficult. The user controls the direction of the snake's head (up, down, left, or right), and the snake's body follows. The player cannot stop the snake from moving while the game is in progress, and cannot make the snake go in reverse.</blockquote>
+
+  <figure>
+    <img src="game.png" alt="Snake Game" style="width:40em">
+    <figcaption>Screenshot of the digital themed snake game</figcaption>
+  </figure>
+
+  <p>For this MP, you will be implementing a digital themed version of "snake".  Two snakes play the game, a human snake controlled by the keyboard, and a computer snake controlled by a recursive search algorithm.  The game is played on a 2-dimensional grid of cells, where each cell is either 0, 1, or 2.  Snakes can pass through 0s freely, and eat 1s for food.  Since the snakes only understand binary, they are very afraid of 2s and cannot pass through them.</p>
+</section>
+
+<section>
+  <h2>Implementation</h2>
+
+  <p>Your task is to implement all functions marked <code>Implement me!</code> in <var>file.c</var>, <var>game.c</var>, and <var>ai.c</var>  To maximize partial credit awards, we recommend that you follow this order of implementation:</p>
+  <p>MP5.1 due Wednesday 4/20</p>
+  <ul>
+    <li>(30 points) Implement <code>load_game</code> in <var>file.c</var> to get board loads working.  You'll want to implement a few helper functions in game.c to simplify this function implementation, including <code>get_board_cell</code>.  Run the program to see the boards that you're loading.</li>
+    <li>(5 points) Implement <code>destroy_game</code> in <var>file.c</var>  Make sure the file tests pass with valgrind.</li>
+    <li>(5 points) Implement <code>randomly_add_food</code> in <var>game.c</var>  Run the game, and verify that food is sporadically added.</li>
+  </ul>
+  <p>MP5.2 due Wednesday 4/27</p>
+  <ul>
+    <li>(20 points) Assume that all snakes go north, ignore food, and implement the linked-list style <code>append_snake_head</code> and <code>remove_snake_tail</code> functions, as well as <code>update_snake_head</code>, and <code>update_snake_tail</code>.  Observe snakes moving north and crashing.</li>
+    <li>(20 points) Rescind the aforementioned assumption and take food into account, and get the human controlled snake working.</li>
+    <li>(10 points) Implement the computer AI by completing the functions in <var>ai.c</var>, observe the computer controlled snake chasing food.</li>
+  </ul>
+
+  <p>The maximum score for this MP is 100 points, so the remaining points will be given for style:</p>
+  <ul>
+    <li>(10 points) Code conforms to ECE 190 coding conventions</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Submission</h2>
+  
+  <h3>MP5.1</h3>
+  <p>To submit your code for MP5.1, run <code>make test</code> to confirm that your code compiles and that functions that you think are completed are passing the tests.  Then run in the <var>src</var> directory:</p>
+  <pre>handin --MP 5.1 file.c game.c</pre>
+  
+  <h3>MP5.2</h3>
+  <p>To submit your code for MP5.2, run <code>make test</code> to confirm that your code compiles and that the functions that you think are completed are passing the tests.  Then run in the <var>src</var> directory:</p>
+  <pre>handing --MP 5.2 file.c game.c ai.c</pre>
+  
+  <h3>Grading</h3>
+  <p>Your functionality grade for this MP (90 points) will be determined by automated tests run on your MP5.2 submission.  This means that fixing bugs in your MP5.1 code before the MP5.2 submission will be to your advantage.  Your MP5.1 submission will not be graded directly, but it will have an effect on your grade in the following situations:</p>
+  <ul>
+    <li>Late submission will result in your functionality scores for the corresponding MP5.1 parts being reduced according to the ECE 190 late policy.</li>
+    <li>Submitting incomplete or no work for MP5.1 will result in half credit for <strong>all</strong> parts that you were supposed to have done by the MP5.1 checkpoint.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Building and testing</h2>
+  
+  <p>Simply run <code>make</code> to build the game, which will produce the game executable in the <var>bin</var> directory.<br/>
+     The command line usage for the game executable is:</p>
+  <pre>snake &lt;level_file&gt;</pre>
+  <p>You can use one of the example level files in the <var>levels</var> directory for <code>&lt;level_file&gt;</code></p>
+
+  <p>Automated test programs are provided to help you check your code.  To run all tests, simply run <code>make test</code>.  To run a particular test, such as <var>test_file</var>, run in the <var>tests</var> directory:</p>
+  <pre>
+make test_file
+./test_file</pre>
+  <p>Valgrind and gdb can be used with these test programs to help you track down bugs.</p>
+</section>
+
+<section>
+  <h2>Project Layout</h2>
+
+  <dl>
+    <dt>Makefile</dt>
+      <dd>Defines rules for building and testing the project.  For most tasks, this is the Makefile to use</dd>
+    <dt>Makefile.inc</dt>
+      <dd>Build configuration file; defines compiler program and flags.</dd>
+    <dt>src/</dt>
+      <dd>
+        <dl>
+          <dt>Makefile<dt>
+            <dd>Defines rules for building the program</dd>
+          <dt>main.c</dt>
+            <dd>Contains entry point and "glue code" to connect the pieces of the program together.  You should not need to modify this file.</dd>
+          <dt>game.c, game.h</dt>
+            <dd>Defines the game data structures, and functions for creating, updating, and destroying game elements</dd>
+          <dt>view.c, view.h</dt>
+            <dd>Implements the game view windows, associated functions that draw the game elements, and keyboard input handling.  You should not need to modify these files.</dd>
+          <dt>file.c, file.h</dt>
+            <dd>Implements snake game loading from a level file.</dd>
+          <dt>ai.c, ai.h</dt>
+            <dd>Implements the computer snake's move selection algorithm</dd>
+        </dl>
+      </dd>
+    <dt>
+    <dt>bin/</dt>
+      <dd>
+        <dl>
+          <dt>snake</dt>
+            <dd>Your program</dd>
+        </dl>
+      </dd>
+    <dt>levels/</dt>
+      <dd>
+        <dl>
+          <dt>README.txt</dt>
+            <dd>Format specification for the level files</dd>
+          <dt>random.txt, small.txt, walls.txt, maze.txt, simple.txt, spiral.txt</dt>
+            <dd>Example level files</dd>
+        </dl>
+      </dd>
+    <dt>
+    <dt>graphics/</dt>
+      <dd>
+        <dl>
+          <dt>0.bmp, 1.bmp, 2.bmp, blob.bmp, e.bmp, ew.bmp, n.bmp, ne.bmp, ns.bmp, nw.bmp, s.bmp, se.bmp, sw.bmp, w.bmp</dt>
+            <dd>Sprite images used by the game to draw the contents of the view window</dd>
+        </dl>
+      </dd>
+    <dt>tests/</dt>
+      <dd>
+        <dl>
+          <dt>Makefile</dt>
+            <dd>Defines rules for building the tests</dd>
+          <dt>test_utils.c, test_utils.h</dt>
+            <dd>Utility library used by the test modules.  You should not need to modify these files.</dd>
+          <dt>test_file.c</dt>
+            <dd>Tests for the file module</dd>
+          <dt>test_game.c</dt>
+            <dd>Tests for the game module</dd>
+          <dt>test_ai.c</dt>
+            <dd>Tests for the AI module</dd>
+        </dl>
+      </dd>
+  </dl>
+
+</section>
+</body>
+</html>
